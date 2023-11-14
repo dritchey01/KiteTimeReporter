@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import '_variables';
+
+.navbar {
+  background-color: $kite-blue;
+}
