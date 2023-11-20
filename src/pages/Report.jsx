@@ -100,20 +100,27 @@ const ReportPage = ({ isAdmin }) => {
       </span>
       <span>
         <Grid isAdmin={isAdmin} adminRowData={adminRowData} empRowData={empRowData}/>
-        <button
-          className="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded ml-5 mr-3 float-right"
-          type="button"
-          onClick={() => alert('pseudo download')}
-        >
-        Download
-      </button>
-        <button
-          className="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded ml-5 mr-3 float-right"
-          type="button"
-          onClick={() => setShowModal(true)}
-        >
-        Add new
-      </button>
+        {
+          isAdmin ? (
+            <button
+              className="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded ml-5 mr-3 float-right"
+              type="button"
+              onClick={() => alert('pseudo download')}
+            >
+              Download
+            </button>
+          ) : (
+            <button
+              className="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded ml-5 mr-3 float-right"
+              type="button"
+              onClick={() => setShowModal(true)}
+            >
+              Add new
+            </button>
+          )
+        }
+
+
       </span>
     </div>
   )

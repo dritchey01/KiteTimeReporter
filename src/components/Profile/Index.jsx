@@ -7,7 +7,7 @@ const Profile = ({ setIsAdmin }) => {
   return (
   <div>
     <div className="items-center" onClick={() => {setIsOpen(!isOpen)}}>
-      Signed in as DRitchey
+      Signed in as AGKU
       {isOpen ? (<FaCaretDown style={{display: 'inline'}}/>) : (<FaCaretLeft style={{display: 'inline'}}/>)}
     </div>
     {
