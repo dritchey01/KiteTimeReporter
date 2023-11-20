@@ -10,6 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@progress/kendo-data-query": "^1.7.0",
+    "@progress/kendo-react-buttons": "^6.1.1",
+    "@progress/kendo-react-common": "^6.1.1",
+    "@progress/kendo-react-data-tools": "^6.1.1",
+    "@progress/kendo-react-excel-export": "^6.1.1",
+    "@progress/kendo-react-grid": "^6.1.1",
+    "@progress/kendo-react-inputs": "^6.1.1",
+    "@progress/kendo-react-pdf": "^6.1.1",
     "ag-grid-community": "^30.2.0",
     "ag-grid-react": "^30.2.0",
     "localforage": "^1.10.0",
@@ -18,7 +26,7 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.11.0",
     "react-router-dom": "^6.18.0",
-    "sort-by": "^1.2.0"
+    "sort-by": "^0.0.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
