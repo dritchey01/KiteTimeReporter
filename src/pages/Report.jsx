@@ -1,6 +1,6 @@
 import { useState } from "react"
 import Form from "../components/Form"
-import Grid from "../components/Grid"
+import Grid from "../components/Grid/oldIndex"
 import Modal from "../components/Modal"
 import PropTypes from 'prop-types';
 
@@ -95,7 +95,7 @@ const ReportPage = ({ isAdmin }) => {
 
   return (
     <div>
-      <Modal showModal={showModal} setShowModal={setShowModal} handleFormSubmit={handleFormSubmit}>{<Form />}</Modal>
+      {/* <Modal showModal={showModal} setShowModal={setShowModal} handleFormSubmit={handleFormSubmit}>{<Form />}</Modal>
       <span>
       </span>
       <span>
@@ -121,7 +121,7 @@ const ReportPage = ({ isAdmin }) => {
         }
 
 
-      </span>
+      </span> */}
     </div>
   )
 }
