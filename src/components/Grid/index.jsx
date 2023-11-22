@@ -1,65 +1,118 @@
-import { useState, useRef } from "react";
-import { AgGridReact } from "ag-grid-react";
-import PropTypes from 'prop-types';
+import { useState } from "react";
+import { Grid, GridColumn as Column } from '@progress/kendo-react-grid';
+import { GridColumnMenuSort, GridColumnMenuFilter } from '@progress/kendo-react-grid';
+import { orderBy, filterBy } from "@progress/kendo-data-query";
+import { employees } from '../../mocks/employees';
+import './grid.css'
+import { CommandCell } from "./CustomCells/CommandCell";
 
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-alpine.css";
+const ReportGrid = () => {
+  const DATA_ITEM_KEY = "id";
+  const editField = "inEdit";
+  const initialDataState = {
+    take: 10,
+    skip: 0,
+    group: [],
+  };
 
-const Grid = ({ isAdmin, adminRowData, empRowData }) => {
-  const gridRef = useRef();
+  const initialSort = [
+    {
+      field: "id",
+      dir: "desc",
+    },
+  ];
 
-  const dateFormatter = (params) => {
-  const dateAsString = params.data.workWeek;
-  const dateParts = dateAsString.split('-');
-  return `${dateParts[1]}-${dateParts[2]}-${dateParts[0]}`;
+  const initialFilter = {
+    logic: "and",
+    filters: [
+      {
+        field: "",
+        operator: "",
+        value: "",
+      },
+    ],
+  };
+
+  const [data, setData] = useState(employees);
+  const [sort, setSort] = useState(initialSort);
+  const [filter, setFilter] = useState(initialFilter);
+
+  const handleSortChange = (sortObj) => {
+    setSort(sortObj);
+    setData(orderBy(data, sortObj))
   }
 
-  const [columnDefs] = useState([
-    { headerName: "First Name", field: "firstName", resizable: true },
-    { headerNane: "Last Name", field: "lastName", resizable: true },
-    { headerName: "Email", field: 'email', resizable: true },
-    { headerName: "Username", field: 'userName', resizable: true },
-    { headerName: "Contract", field: 'contract', resizable: true },
-    { headerName: "Task Name", field: 'taskName', resizable: true },
-    { headerName: "Hours", field: 'hours', resizable: true},
-    { headerName: "Work Week", field: 'workWeek', resizable: true, valueFormatter: dateFormatter,},
-    { headerName: "Description", field: 'description', resizable: true },
-  ]);
+  const handleFilterChange = (filterObj) => {
+    setFilter(filterObj);
+    setData(filterBy(data, filterObj))
+  }
 
-  const onFirstDataRendered = (params) => {
-    params.api.sizeColumnsToFit();
+  const dataStateChange = event => {
+    // in case we need to set data?
+    console.log(event);
   };
 
-  const defaultColDef = {
-    sortable: true,
-    filter: true,
-    filterParams: { buttons: ['reset'] },
-    flex: 1,
+  const addNew = () => {
+    const newDataItem = {
+      inEdit: true,
+      // Discontinued: false
+      firstName: 'Tom',
+      lastName: 'Smith'
+    };
+    setData([newDataItem, ...data]);
   };
-  
+
+
+  const ColumnMenu = props => {
+    return <div>
+        <GridColumnMenuSort {...props} />
+        <GridColumnMenuFilter {...props} />
+      </div>;
+  };
+
+  const commandCellFn = props => <CommandCell editField={editField} {...props}/>;
 
   return (
-    <div className="ag-theme-alpine" style={{
-      height: '57vh', overflow: 'hidden', width: 'auto', margin: '10px',
-    }}>
-      <AgGridReact
-        ref={gridRef}
-        rowData={isAdmin ? adminRowData : empRowData}
-        columnDefs={columnDefs}
-        defaultColDef={defaultColDef} 
-        rowSelection="single"
-        pagination
-        paginationPageSize={10}
-        onFirstDataRendered={onFirstDataRendered}
-      />
+    <div>
+      <Grid style={{
+        height: 'auto'
+      }} pageable={{
+        pageSizes: true
+      }} 
+      data={data}
+      sortable={true}
+      sort={sort}
+      onSortChange={(e) => {
+        handleSortChange(e.sort)
+      }}
+      filter={filter}
+      onFilterChange={(e) => {
+        handleFilterChange(e.filter)
+      }}
+      total={data.count} 
+      onDataStateChange={dataStateChange} 
+      {...initialDataState}  
+      dataItemKey={DATA_ITEM_KEY}
+      editField={editField}
+      >
+        <Column field="firstName" title="First Name" columnMenu={ColumnMenu} width="250px" editable={false} />
+        <Column field="lastName" title="Last Name" columnMenu={ColumnMenu} width="220px" editable={false} />
+        <Column field="contract" title="Contract" columnMenu={ColumnMenu} width="220px" />
+        <Column field="taskName" title="Task Name" columnMenu={ColumnMenu} width="220px" />
+        <Column field="hours" title="Hours" columnMenu={ColumnMenu} width="220px" editor="numeric" />
+        <Column field="workWeek" title="Work Week" columnMenu={ColumnMenu} width="220px" editor="date" format="{0:d}" />
+        <Column field="description" title="Description" columnMenu={ColumnMenu} width="300px" />
+        <Column title="Commands" cell={commandCellFn} width="300px" />
+      </Grid>
+      <button
+        className="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded ml-5 mr-3 float-right"
+        type="button"
+        onClick={() => {addNew()}}
+      >
+        Add new
+      </button>
     </div>
-  );
-};
-
-export default Grid;
-
-Grid.propTypes = {
-  isAdmin: PropTypes.bool,
-  adminRowData: PropTypes.array,
-  empRowData: PropTypes.array
+  )
 }
+
+export default ReportGrid;
