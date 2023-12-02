@@ -10,6 +10,7 @@ import "./grid.css";
 import { CommandCell } from "./CustomCells/CommandCell";
 import { DateCell } from "./CustomCells/DateCell";
 import { DropDownCell } from "./CustomCells/DropDownCell";
+import { v4 as uuid } from "uuid";
 
 const ReportGrid = () => {
   const DATA_ITEM_KEY = "id";
@@ -39,7 +40,8 @@ const ReportGrid = () => {
     ],
   };
 
-  const [data, setData] = useState(employees);
+  // const [data, setData] = useState(employees);
+  const [data, setData] = useState([]);
   const [sort, setSort] = useState(initialSort);
   const [filter, setFilter] = useState(initialFilter);
 
@@ -58,21 +60,53 @@ const ReportGrid = () => {
     console.log(event);
   };
 
+  const itemChange = (e) => {
+    const newData = data.map((item) =>
+      item.id === e.dataItem.id
+        ? {
+            ...item,
+            [e.field || ""]: e.value,
+          }
+        : item
+    );
+    setData(newData);
+  };
+
   const addNew = () => {
     const newDataItem = {
+      id: uuid(),
       inEdit: true,
       firstName: "Tom",
       lastName: "Smith",
+      isNew: true,
     };
     setData([newDataItem, ...data]);
   };
 
   const add = (dataItem) => {
-    dataItem.id = 100;
+    const idx = data.findIndex((row) => row.id === dataItem.id);
     dataItem.inEdit = false;
     const newData = [...data];
-    newData[0] = dataItem;
+    newData[idx] = dataItem;
     setData(newData);
+  };
+
+  const remove = (dataItem) => {
+    const newData = data.filter((row) => row.id !== dataItem.id);
+    setData(newData);
+  };
+
+  const enterEdit = (dataItem) => {
+    setData(
+      data.map((row) =>
+        row.id === dataItem.id
+          ? {
+              ...row,
+              inEdit: true,
+            }
+          : row
+      )
+    );
   };
 
   const ColumnMenu = (props) => {
@@ -85,11 +119,17 @@ const ReportGrid = () => {
   };
 
   const commandCellFn = (props) => (
-    <CommandCell editField={editField} add={add} {...props} />
+    <CommandCell
+      editField={editField}
+      add={add}
+      remove={remove}
+      edit={enterEdit}
+      {...props}
+    />
   );
 
   const contractCellFn = (props) => (
-    <DropDownCell editField={editField} {...props} />
+    <DropDownCell editField={editField} list={contracts} {...props} />
   );
 
   return (
@@ -116,6 +156,9 @@ const ReportGrid = () => {
         {...initialDataState}
         dataItemKey={DATA_ITEM_KEY}
         editField={editField}
+        onItemChange={(e) => {
+          itemChange(e);
+        }}
       >
         <Column
           field="firstName"
