@@ -5,14 +5,15 @@ import {
   GridColumnMenuFilter,
 } from "@progress/kendo-react-grid";
 import { orderBy, filterBy } from "@progress/kendo-data-query";
-import { employees } from "../../mocks/employees";
+import PropTypes from "prop-types";
+// import { employees } from "../../mocks/employees";
 import "./grid.css";
 import { CommandCell } from "./CustomCells/CommandCell";
 import { DateCell } from "./CustomCells/DateCell";
 import { DropDownCell } from "./CustomCells/DropDownCell";
 import { v4 as uuid } from "uuid";
 
-const ReportGrid = () => {
+const ReportGrid = ({ selectedUser }) => {
   const DATA_ITEM_KEY = "id";
   const editField = "inEdit";
   const contracts = ["ATLAS", "KAP", "DLM", "ATS", "Misc"];
@@ -40,7 +41,6 @@ const ReportGrid = () => {
     ],
   };
 
-  // const [data, setData] = useState(employees);
   const [data, setData] = useState([]);
   const [sort, setSort] = useState(initialSort);
   const [filter, setFilter] = useState(initialFilter);
@@ -73,11 +73,12 @@ const ReportGrid = () => {
   };
 
   const addNew = () => {
+    const [firstName, lastName] = selectedUser.split(" ");
     const newDataItem = {
       id: uuid(),
       inEdit: true,
-      firstName: "Tom",
-      lastName: "Smith",
+      firstName,
+      lastName,
       isNew: true,
     };
     setData([newDataItem, ...data]);
@@ -223,3 +224,7 @@ const ReportGrid = () => {
 };
 
 export default ReportGrid;
+
+ReportGrid.propTypes = {
+  selectedUser: PropTypes.object,
+};
