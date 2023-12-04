@@ -1,15 +1,10 @@
 import { useState } from "react";
 import ReportGrid from "../components/Grid/index";
 import { DropDownList } from "@progress/kendo-react-dropdowns";
+import PropTypes from "prop-types";
 
-const Home = () => {
+const Home = ({ users }) => {
   const [selectedUser, setSelectedUser] = useState(null);
-  const users = [
-    "Dj Ritchey",
-    "Andy Greenhaw",
-    "Fethi Akcay",
-    "Mahesh Chandana",
-  ];
   const handleChange = (e) => {
     setSelectedUser(e.target.value);
   };
@@ -31,3 +26,7 @@ const Home = () => {
 };
 
 export default Home;
+
+Home.propTypes = {
+  users: PropTypes.array,
+};
