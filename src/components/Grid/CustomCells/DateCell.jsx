@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 // import Moment from "react-moment";
 
 export const DateCell = ({ dataItem, field, onChange }) => {
-  console.log(dataItem);
   const getDateOfWeek = (week, year) => {
     const weekNumber = week.split("W")[1];
     var day = 1 + (weekNumber - 1) * 7; // 1st of January + 7 days for each week
